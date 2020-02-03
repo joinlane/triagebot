@@ -38,7 +38,8 @@ function handleCommand(payload) {
   // load channel history
   let params = qs.stringify({ count: 1000, token: TOKEN, channel: channel_id });
   let getHistory = axios.post('https://slack.com/api/channels.history', params);
-
+  console.log(getHistory);
+  console.log('-------');
   // build the triage report
   let buildReport = result => Promise.resolve( triage(payload, result.data.messages || []) );
 
