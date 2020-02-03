@@ -23,11 +23,25 @@ function create(payload, messages, options) {
   console.log("Settings \n");
   console.log(settings);
   let map = getRequest.bind(null, settings);
+  console.log("Map \n");
+  console.log(map);
+
   let sort = (a, b) => a.priority - b.priority;
   let filter = m => m.emoji && !m.bot;
-
+  console.log("Sort \n");
+  console.log(sort);
+      
+  console.log("Filter \n");
+  console.log(filter);
   let requests = messages.map(map).filter(filter).sort(sort);
+      
+  console.log("Requests \n");
+  console.log(requests);
+      
   let message = buildMessage(payload, requests, settings);
+
+  console.log("Message \n");
+  console.log(message);
 
   return message;
 }
