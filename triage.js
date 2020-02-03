@@ -10,8 +10,18 @@ const DEFAULTS = require('./settings.json'),
  * @returns {Object} The Slack triage report message
  */
 function create(payload, messages, options) {
-  let settings = Object.assign({}, DEFAULTS, options);
+  console.log("Messages \n");
+  console.log(messages);
 
+  console.log("Options \n");
+  console.log(options);
+  
+  console.log("Payload \n");
+  console.log(payload);
+  
+  let settings = Object.assign({}, DEFAULTS, options);
+  console.log("Settings \n");
+  console.log(settings);
   let map = getRequest.bind(null, settings);
   let sort = (a, b) => a.priority - b.priority;
   let filter = m => m.emoji && !m.bot;
