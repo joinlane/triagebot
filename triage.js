@@ -27,7 +27,7 @@ function create(payload, messages, options) {
   console.log(map);
 
   let sort = (a, b) => a.priority - b.priority;
-  let filter = m => m.emoji && !m.bot;
+  let filter = m => m.emoji
   console.log("Sort \n");
   console.log(sort);
       
