@@ -1,3 +1,7 @@
+/*
+TODO: Figure out best way to sort on /triage me command
+ */
+
 const DEFAULTS = require('./settings.json'),
       i18n = require('i18n');
 
@@ -15,10 +19,10 @@ function create(payload, messages, options) {
 
   console.log("Options \n");
   console.log(options);
-  
+
   console.log("Payload \n");
   console.log(payload);
-  
+
   let settings = Object.assign({}, DEFAULTS, options);
   console.log("Settings \n");
   console.log(settings);
@@ -27,17 +31,21 @@ function create(payload, messages, options) {
   console.log(map);
 
   let sort = (a, b) => a.priority - b.priority;
-  let filter = m => m.emoji
+
+  let me_test = new RegExp(settings.me_text, 'i');
+  let filter = m => me_test.test(payload.text) ? (m.emoji && (m.message.user === payload.user_id)) : m.emoji;
+
+
   console.log("Sort \n");
   console.log(sort);
-      
+
   console.log("Filter \n");
   console.log(filter);
   let requests = messages.map(map).filter(filter).sort(sort);
-      
+
   console.log("Requests \n");
   console.log(requests);
-      
+
   let message = buildMessage(payload, requests, settings);
 
   console.log("Message \n");
@@ -86,10 +94,11 @@ function buildMessage(payload, requests, settings) {
   let {channel_id, channel_name} = payload;
   let message = { unfurl_links: settings.unfurl_links };
   let publish_test = new RegExp(settings.publish_text, 'i');
+  let me_test = new RegExp(settings.me_text, 'i');
 
   // build display text
   let map = buildSection.bind(null, settings, requests, payload);
-  message.text = settings.display.map(map).join('\n\n\n');
+  message.text = me_test.test(payload.text) ? settings.display_all.map(map).join('\n\n\n') : settings.display.map(map).join('\n\n\n');
 
   // attach instructions if not publish else make public
   let pending_emojis = settings.pending.emojis.join(', ');
@@ -113,7 +122,7 @@ function buildMessage(payload, requests, settings) {
     },
     {
       mrkdwn_in: ["pretext"],
-      pretext: i18n.__("To publish this to the channel type `/triage publish`.")
+      pretext: i18n.__("To publish this to the channel type `/triage publish`. Will not publish the results of `/triage me`")
     }
   ];
   if (publish_test.test(payload.text)) message.response_type = 'in_channel';

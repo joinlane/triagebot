@@ -2,8 +2,10 @@
   "unfurl_links": true,
 
   "publish_text": "publish",
+  "me_text": "me",
 
   "display": [ "pending", "review" ],
+  "display_all": [ "pending", "review", "addressed" ],
 
   "pending": {
     "title": "There are `{{count}}` request(s) pending in {{channel}}:",
@@ -16,7 +18,7 @@
   },
 
   "addressed": {
-    "title": "There are `{{count}}` request(s) addressed in {{channel}}:",
+    "title": "There are `{{count}}` request(s) addressed :white_check_mark: in {{channel}}:",
     "emojis": [ ":white_check_mark:" ]
   }
 }
