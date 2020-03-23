@@ -1,10 +1,6 @@
 /*
-* TODO: get user who submitted request
-*  add filter if me_test to only show requests from that user
-*
-* DONE: if me_test show already resolved items too
-* add clarity text that /triage publish will not publich a /triage me response
-* */
+TODO: Figure out best way to sort on /triage me command
+ */
 
 const DEFAULTS = require('./settings.json'),
       i18n = require('i18n');
