@@ -14,46 +14,26 @@ const DEFAULTS = require('./settings.json'),
  * @returns {Object} The Slack triage report message
  */
 function create(payload, messages, options) {
-  console.log("Messages \n");
-  console.log(messages);
-
-  console.log("Options \n");
-  console.log(options);
-
-  console.log("Payload \n");
-  console.log(payload);
 
   let settings = Object.assign({}, DEFAULTS, options);
-  console.log("Settings \n");
-  console.log(settings);
   let map = getRequest.bind(null, settings);
-  console.log("Map \n");
-  console.log(map);
+
 
   let sort = (a, b) => a.priority - b.priority;
 
   let me_test = new RegExp(settings.me_text, 'i');
-  let filter = m => me_test.test(payload.text) ? (m.emoji && (m.message.user === payload.user_id)) : m.emoji;
+  let user_test = new RegExp(payload.user_id, 'i');
 
+  let filter = function(m) {
+    return me_test.test(payload.text)
+        ? (m.emoji && ((m.message.user && (m.message.user === payload.user_id)) || user_test.test(m.message.text)))
+        : m.emoji;
+  };
 
-  console.log("Sort \n");
-  console.log(sort);
-
-  console.log("Filter \n");
-  console.log(filter);
   let requests = messages.map(map).filter(filter).sort(sort);
 
-  console.log("Requests \n");
-  console.log(requests);
-
-  let message = buildMessage(payload, requests, settings);
-
-  console.log("Message \n");
-  console.log(message);
-
-  return message;
+  return buildMessage(payload, requests, settings);
 }
-
 
 /**
  * Get triage request details from a Slack message
